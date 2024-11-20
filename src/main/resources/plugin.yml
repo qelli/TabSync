@@ -1,0 +1,13 @@
+name: TabSync
+version: '1.0-SNAPSHOT'
+main: dev.qelli.minecraft.tabSync.TabSync
+api-version: '1.21'
+load: STARTUP
+# depend: [TAB]
+depend: [ ProtocolLib ]
+authors: [ blithe_kitsune <https://qelli.dev> ]
+website: https://qelli.dev
+commands:
+  fakeplayers:
+    description: fakeplayers command
+    usage: /fakeplayers

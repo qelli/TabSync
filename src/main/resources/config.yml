@@ -1,0 +1,15 @@
+debug: false
+connected-instances:
+ - 127.0.0.1:55331
+ - 127.0.0.1:55330
+# Storage configuration
+storage: 'redis'
+mysql:
+  host: 127.0.0.1
+  port: 3306
+  username: 'root'
+  password: ''
+  database: 'database'
+redis:
+  host: 127.0.0.1
+  port: 5555
