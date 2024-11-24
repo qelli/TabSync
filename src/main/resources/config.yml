@@ -1,15 +1,11 @@
 debug: false
-connected-instances:
- - 127.0.0.1:55331
- - 127.0.0.1:55330
-# Storage configuration
-storage: 'redis'
-mysql:
-  host: 127.0.0.1
-  port: 3306
-  username: 'root'
-  password: ''
-  database: 'database'
-redis:
-  host: 127.0.0.1
-  port: 5555
+
+instance:
+  id: '1'
+  name: 'instance1'
+connection: 
+  type: 'redis'
+  url: 'redis://<user>:<pass>@<host>:<port>/'
+  poll: 1000
+  socket-timeout: 5000
+  connection-timeout: 5000
