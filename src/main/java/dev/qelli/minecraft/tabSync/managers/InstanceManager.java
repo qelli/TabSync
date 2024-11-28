@@ -43,6 +43,7 @@ public class InstanceManager {
     public void stop() {
         messenger.clear();
         messenger.close();
+        // TODO: Send sync message of instance disconnecting
     }
 
     public String getInstanceName() {
