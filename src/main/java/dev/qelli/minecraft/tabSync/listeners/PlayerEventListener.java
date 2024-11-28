@@ -5,6 +5,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import dev.qelli.minecraft.tabSync.TabSync;
+import dev.qelli.minecraft.tabSync.messenger.models.PlayerModel;
 
 public class PlayerEventListener implements Listener {
     
@@ -16,18 +17,12 @@ public class PlayerEventListener implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        plugin.getMessenger().sendTabListJoinUpdate(
-            event.getPlayer().getUniqueId().toString(),
-            event.getPlayer().getName()
-        );
+        plugin.getInstanceManager().playerJoined(PlayerModel.fromPlayer(event.getPlayer()));
     }
 
     @EventHandler
     public void onPlayerQuit(PlayerJoinEvent event) {
-        plugin.getMessenger().sendTabListQuitUpdate(
-            event.getPlayer().getUniqueId().toString(),
-            event.getPlayer().getName()
-        );
+        plugin.getInstanceManager().playerQuit(PlayerModel.fromPlayer(event.getPlayer()));
     }
 
 }

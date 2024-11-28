@@ -1,21 +1,21 @@
 package dev.qelli.minecraft.tabSync;
 
-import java.util.UUID;
-
 import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import dev.qelli.minecraft.tabSync.listeners.PlayerEventListener;
 import dev.qelli.minecraft.tabSync.managers.ChatManager;
+import dev.qelli.minecraft.tabSync.managers.InstanceManager;
 import dev.qelli.minecraft.tabSync.managers.TabListManager;
-import dev.qelli.minecraft.tabSync.messenger.Messenger;
-import dev.qelli.minecraft.tabSync.utils.Constants;
 
 public final class TabSync extends JavaPlugin {
 
-    private Messenger messenger;
     private TabListManager tabListManager;
     private ChatManager chatManager;
+    private InstanceManager instanceManager;
 
     @Override
     public void onEnable() {
@@ -31,58 +31,48 @@ public final class TabSync extends JavaPlugin {
             return;
         }
 
-        messenger = new Messenger(this);
-        messenger.start();
-        if(!messenger.isEnabled()) {
-            getLogger().severe("Failed to initialize messenger, disabling plugin.");
+        instanceManager = new InstanceManager(this);
+        instanceManager.init();
+        if(!instanceManager.isReady()) {
+            getLogger().severe("InstanceManager failed to initialize.");
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
 
-        // TODO: Consider moving somewhere else
         tabListManager = new TabListManager(this);
         chatManager = new ChatManager(this);
 
-        /*
-         * Channel to keep TabList in sync
-         */
-        messenger.subscribeToTabListUpdates((channel, messages) -> {
-            getLogger().info("Received: " + messages[1]);
-            switch(messages[1]) {
-                case Constants.TAB_ACTION_JOIN:
-                    tabListManager.addPlayer(UUID.fromString(messages[2]), messages[3]);
-                    break;
-                case Constants.TAB_ACTION_QUIT:
-                    tabListManager.removePlayer(UUID.fromString(messages[2]));
-                    break;
-            }
-        });
-
-        /*
-         * Channel to keep Chat in sync
-         * 
-         * Receives:
-         */
-        // messenger.subscribe(Constants.CHAT_CHANNEL_NAME).consume((channel, message) -> {
-        //     getLogger().info("Received message: " + message);
-        // });
-
         getServer().getPluginManager().registerEvents(new PlayerEventListener(this), this);
 
+        // ONLY FOR DEV PURPOSES
+        getCommand("log").setExecutor(new CommandExecutor() {
+            @Override
+            public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+                if(args.length > 0 && args[0].equals("load")) {
+                    getLogger().info("Sending sync message...");
+                    instanceManager.load();
+                }
+                getInstanceManager().log();
+                return false;
+            }
+        });
     }
 
     @Override
     public void onDisable() {
-        messenger.clear();
-        messenger.close();
+        instanceManager.stop();
+    }
+
+    public InstanceManager getInstanceManager() {
+        return instanceManager;
     }
 
     public TabListManager getTabListManager() {
         return tabListManager;
     }
 
-    public Messenger getMessenger() {
-        return messenger;
+    public ChatManager getChatManager() {
+        return chatManager;
     }
 
     public boolean isDebug() {

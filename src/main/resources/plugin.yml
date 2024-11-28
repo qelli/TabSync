@@ -8,6 +8,7 @@ depend: [ ProtocolLib ]
 authors: [ blithe_kitsune <https://qelli.dev> ]
 website: https://qelli.dev
 commands:
-  fakeplayers:
-    description: fakeplayers command
-    usage: /fakeplayers
+  log:
+    description: TabSync command
+    usage: /log
+    permission: tabsync.command

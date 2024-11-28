@@ -5,6 +5,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.entity.Player;
@@ -12,6 +13,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import dev.qelli.minecraft.tabSync.TabSync;
+import dev.qelli.minecraft.tabSync.messenger.models.PlayerModel;
 import dev.qelli.minecraft.tabSync.utils.ProtocolLibUtil;
 
 public class TabListManager {
@@ -22,30 +24,30 @@ public class TabListManager {
         this.plugin = plugin;
     }
 
-    public void addPlayer(Player player) {
-        ProtocolLibUtil.sendPacketToAll(
-            ProtocolLibUtil.createTabListAddPacket(
-                player.getUniqueId(),
-                player.getName(),
-                getSkin(player.getUniqueId())
-            )
-        );
-    }
-    public void addPlayer(UUID uuid, String name) {
-        ProtocolLibUtil.sendPacketToAll(
-            ProtocolLibUtil.createTabListAddPacket(
-                uuid,
-                name,
-                getSkin(uuid)
-            )
-        );
-    }
-    public void removePlayer(Player player) {
-        // Remove player from tab list
-    }
-    public void removePlayer(UUID uuid) {
+    // public void addPlayer(Player player) {
+    //     ProtocolLibUtil.sendPacketToAll(
+    //         ProtocolLibUtil.createTabListAddPacket(
+    //             player.getUniqueId(),
+    //             player.getName(),
+    //             getSkin(player.getUniqueId())
+    //         )
+    //     );
+    // }
+    // public void addPlayers(List<PlayerModel> players) {
+    //     ProtocolLibUtil.sendPacketToAll(
+    //         ProtocolLibUtil.createTabListAddPacket(players)
+    //     );
+    // }
+    // public void removePlayer(Player player) {
+    //     // Remove player from tab list
+    // }
+    // public void removePlayer(UUID uuid) {
 
-    }
+    // }
+
+    // public void syncPlayers() {
+        
+    // }
 
     // TODO: I may need some sleep -- move somewhere else??
     private String getSkin(UUID uuid) {

@@ -1,7 +1,9 @@
 package dev.qelli.minecraft.tabSync.utils;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -12,14 +14,17 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.comphenix.protocol.wrappers.EnumWrappers.NativeGameMode;
+
+import dev.qelli.minecraft.tabSync.messenger.models.PlayerModel;
+
 import com.comphenix.protocol.wrappers.PlayerInfoData;
 import com.comphenix.protocol.wrappers.WrappedGameProfile;
 import com.comphenix.protocol.wrappers.WrappedRemoteChatSessionData;
 import com.comphenix.protocol.wrappers.WrappedSignedProperty;
 
 public class ProtocolLibUtil {
-    
-    public static PacketContainer createTabListAddPacket(UUID uuid, String name, String skinValue) {
+
+    public static PacketContainer createTabListAddPacket(List<PlayerModel> players) {
         PacketContainer packet = ProtocolLibrary.getProtocolManager().createPacket(PacketType.Play.Server.PLAYER_INFO);
         EnumSet<EnumWrappers.PlayerInfoAction> actions = EnumSet.of(
                 EnumWrappers.PlayerInfoAction.ADD_PLAYER,
@@ -27,30 +32,40 @@ public class ProtocolLibUtil {
                 EnumWrappers.PlayerInfoAction.UPDATE_LISTED);
         packet.getPlayerInfoActions().write(0, actions);
 
-        // Set skin
-        WrappedGameProfile gameProfile = new WrappedGameProfile(uuid, name);
-        gameProfile.getProperties().put("textures", new WrappedSignedProperty("textures", skinValue, UUID.randomUUID().toString()));
+        List<PlayerInfoData> data = new ArrayList<>();
+        for (PlayerModel player : players) {
+            WrappedGameProfile gameProfile = new WrappedGameProfile(player.getUuid(), player.getName());
+            gameProfile.getProperties().put("textures", new WrappedSignedProperty("textures", player.getSkin(), UUID.randomUUID().toString()));
+            data.add(new PlayerInfoData(
+                    player.getUuid(),
+                    20,
+                    true,
+                    NativeGameMode.SURVIVAL,
+                    gameProfile,
+                    null,
+                    (WrappedRemoteChatSessionData) null));
+            
+        }
 
-        // Create player info
-        PlayerInfoData data = new PlayerInfoData(
-                uuid,
-                20,
-                true,
-                NativeGameMode.SURVIVAL,
-                gameProfile,
-                null,
-                (WrappedRemoteChatSessionData) null);
-        packet.getPlayerInfoDataLists().write(1, Collections.singletonList(data));
+        packet.getPlayerInfoDataLists().write(1, data);
         return packet;
+    }
+
+    // public static PacketContainer createTabListAddPacket(UUID uuid, String name, String skin) {
+    //     return createTabListAddPacket(Collections.singletonList(new PlayerModel(uuid, name, skin)));
+    // }
+
+    public static void sendPacketToPlayer(Player player, PacketContainer packet) {
+        try {
+            ProtocolLibrary.getProtocolManager().sendServerPacket(player, packet);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void sendPacketToAll(PacketContainer packet) {
         for (Player player : Bukkit.getOnlinePlayers()) {
-            try {
-                ProtocolLibrary.getProtocolManager().sendServerPacket(player, packet);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            sendPacketToPlayer(player, packet);
         }
     }
 
