@@ -8,9 +8,9 @@ import dev.qelli.minecraft.xserversync.XServerSync;
 
 public class Messenger extends AbstractMessenger {
 
-    TabSync plugin;
+    XServerSync plugin;
 
-    public Messenger(TabSync plugin) {
+    public Messenger(XServerSync plugin) {
         this.plugin = plugin;
     }
 

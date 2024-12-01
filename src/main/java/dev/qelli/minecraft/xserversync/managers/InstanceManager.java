@@ -22,9 +22,9 @@ public class InstanceManager {
     private static boolean initialized = false;
     private static Map<String, List<PlayerModel>> instances = new HashMap<>();
 
-    TabSync plugin;
+    XServerSync plugin;
 
-    public InstanceManager(TabSync plugin) {
+    public InstanceManager(XServerSync plugin) {
         this.plugin = plugin;
         this.messenger = new Messenger(plugin);
     }

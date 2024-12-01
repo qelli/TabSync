@@ -11,9 +11,9 @@ import dev.qelli.minecraft.xserversync.messenger.models.PlayerModel;
 
 public class PlayerEventListener implements Listener {
     
-    TabSync plugin;
+    XServerSync plugin;
 
-    public PlayerEventListener(TabSync plugin) {
+    public PlayerEventListener(XServerSync plugin) {
         this.plugin = plugin;
     }
 

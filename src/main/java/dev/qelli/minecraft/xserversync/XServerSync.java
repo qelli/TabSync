@@ -10,7 +10,7 @@ import dev.qelli.minecraft.xserversync.managers.ChatManager;
 import dev.qelli.minecraft.xserversync.managers.InstanceManager;
 import dev.qelli.minecraft.xserversync.managers.TabListManager;
 
-public final class TabSync extends JavaPlugin {
+public final class XServerSync extends JavaPlugin {
 
     private TabListManager tabListManager;
     private ChatManager chatManager;

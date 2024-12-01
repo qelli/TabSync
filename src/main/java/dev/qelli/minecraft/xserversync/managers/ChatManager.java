@@ -5,9 +5,9 @@ import dev.qelli.minecraft.xserversync.XServerSync;
 import dev.qelli.minecraft.xserversync.messenger.models.PlayerModel;
 
 public class ChatManager {
-    private TabSync plugin;
+    private XServerSync plugin;
 
-    public ChatManager(TabSync plugin) {
+    public ChatManager(XServerSync plugin) {
         this.plugin = plugin;
     }
 

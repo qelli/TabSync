@@ -18,9 +18,9 @@ import dev.qelli.minecraft.xserversync.utils.ProtocolLibUtil;
 
 public class TabListManager {
 
-    private TabSync plugin;
+    private XServerSync plugin;
 
-    public TabListManager(TabSync plugin) {
+    public TabListManager(XServerSync plugin) {
         this.plugin = plugin;
     }
 
