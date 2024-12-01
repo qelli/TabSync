@@ -52,6 +52,17 @@ public class PlayerModel {
                 .put("skin", skin)
                 .toString();
     }
+
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        PlayerModel playerModel = (PlayerModel) o;
+        if (getUuid().toString().equals(playerModel.getUuid().toString()))
+            return true;
+        return false;
+    }
         
     public UUID getUuid() {
         return uuid;

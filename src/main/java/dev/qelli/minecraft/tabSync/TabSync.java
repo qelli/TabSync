@@ -1,6 +1,5 @@
 package dev.qelli.minecraft.tabSync;
 
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -25,7 +24,7 @@ public final class TabSync extends JavaPlugin {
             saveDefaultConfig();
         }
 
-        if(!Bukkit.getPluginManager().isPluginEnabled("ProtocolLib")) {
+        if(!getServer().getPluginManager().isPluginEnabled("ProtocolLib")) {
             getLogger().severe("ProtocolLib is required for this plugin to work.");
             getServer().getPluginManager().disablePlugin(this);
             return;
@@ -44,15 +43,25 @@ public final class TabSync extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(new PlayerEventListener(this), this);
 
+        // Not exactly a load but more like a sync
+        getServer().getScheduler().runTask(this, () -> {
+            instanceManager.load();
+        });
+
         // ONLY FOR DEV PURPOSES
-        getCommand("log").setExecutor(new CommandExecutor() {
+        getCommand("tabsync").setExecutor(new CommandExecutor() {
             @Override
             public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-                if(args.length > 0 && args[0].equals("load")) {
-                    getLogger().info("Sending sync message...");
-                    instanceManager.load();
+                if(args.length < 1) {
+                    getInstanceManager().log();
+                    return false;
                 }
-                getInstanceManager().log();
+                switch(args[0]) {
+                    case "load":
+                        getLogger().info("Sending sync message...");
+                        instanceManager.load();
+                        return true;
+                }
                 return false;
             }
         });

@@ -33,17 +33,19 @@ public class InstanceManager {
         instances.put(getInstanceName(), new ArrayList<>());
         messenger.start();
         initListeners();
-        // TODO: Find the best place to call load() as the instances are not getting updated when getting enabled
     }
 
+    /*
+     * Used to tell other instances a new one is alive
+     */
     public void load() {
-        sendSyncMessage(false);
+        sendSyncMessage(Constants.Actions.Instances.Sync);
     }
 
     public void stop() {
+        sendSyncMessage(Constants.Actions.Instances.Sync_EXIT);
         messenger.clear();
         messenger.close();
-        // TODO: Send sync message of instance disconnecting
     }
 
     public String getInstanceName() {
@@ -51,31 +53,32 @@ public class InstanceManager {
     }
 
     public void initListeners() {
-        MessageChannel channel = messenger.subscribe(Constants.PLAYER_UPDATES_CHANNEL_NAME).consume((channelName, messages) -> {
+        MessageChannel channel = messenger.subscribe(Constants.Channels.Main).consume((channelName, messages) -> {
             PlayersUpdateMessageModel message = PlayersUpdateMessageModel.fromString(messages[0]);
+            plugin.getLogger().info("Instance " + message.getInstanceName() + " said " + message.getAction());
             switch(message.getAction()) {
-                case "player_message":
-                // plugin.getChatManager().sendPlayerMessage();
+                case Constants.Actions.Players.Message:
+                    // TODO: Implement
                     break;
-                case "player_joined":
+                case Constants.Actions.Players.Join:
                     instances.get(message.getInstanceName()).addAll(message.getPlayers());
-                    // plugin.getTabListManager().addPlayers(message.getPlayers());
-                    for (PlayerModel player : message.getPlayers()) {
-                        plugin.getChatManager().sendPlayerJoin(player.getName());
-                    }
-                    // TODO: Check instance to send fake player packets to the user
+                    plugin.getTabListManager().addFakePlayers(message.getPlayers());
+                    plugin.getChatManager().sendPlayersJoin(message.getPlayers());
                     break;
-                case "player_quit":
-                    for(PlayerModel player : message.getPlayers()) {
-                        plugin.getChatManager().sendPlayerQuit(player.getName());
-                    }
+                case Constants.Actions.Players.Quit:
+                    instances.get(message.getInstanceName()).removeAll(message.getPlayers());
+                    plugin.getTabListManager().updateFakePlayers(getPlayersFromOtherInstances());
+                    plugin.getChatManager().sendPlayersQuit(message.getPlayers());
                     break;
-                case "player_sync":
+                case Constants.Actions.Instances.Sync:
                     instances.put(message.getInstanceName(), message.getPlayers());
-                    sendSyncMessage(true);
+                    sendSyncMessage(Constants.Actions.Instances.Sync_OK);
                     break;
-                case "player_sync_ok":
+                case Constants.Actions.Instances.Sync_OK:
                     instances.put(message.getInstanceName(), message.getPlayers());
+                    break;
+                case Constants.Actions.Instances.Sync_EXIT:
+                    instances.remove(message.getInstanceName());
                     break;
             }
         });
@@ -85,26 +88,34 @@ public class InstanceManager {
 
     /*
      * When a player joins the current instance
+     * must be added to the current instance
+     * and send a message to others
      */
     public void playerJoined(PlayerModel player) {
         instances.get(getInstanceName()).addAll(List.of(player));
         PlayersUpdateMessageModel message = new PlayersUpdateMessageModel();
         message.setInstanceName(getInstanceName());
-        message.setAction("player_joined");
+        message.setAction(Constants.Actions.Players.Join);
         message.setPlayers(List.of(player));
-        messenger.send(Constants.PLAYER_UPDATES_CHANNEL_NAME, message.toString());
+        messenger.send(Constants.Channels.Main, message.toString());
     }
 
     /*
      * When a player quits the current instance
+     * must be removed from the current instance
+     * and send a message to others
      */
     public void playerQuit(PlayerModel player) {
         instances.get(getInstanceName()).removeAll(List.of(player));
         PlayersUpdateMessageModel message = new PlayersUpdateMessageModel();
         message.setInstanceName(getInstanceName());
-        message.setAction("player_quit");
+        message.setAction(Constants.Actions.Players.Quit);
         message.setPlayers(List.of(player));
-        messenger.send(Constants.PLAYER_UPDATES_CHANNEL_NAME, message.toString());
+        messenger.send(Constants.Channels.Main, message.toString());
+    }
+
+    public void playerChat(PlayerModel player, String message) {
+        // TODO: Implement
     }
 
 
@@ -112,30 +123,32 @@ public class InstanceManager {
 
 
 
-    private void sendSyncMessage(boolean isSyncResponse) {
+    private void sendSyncMessage(String action) {
         PlayersUpdateMessageModel message = new PlayersUpdateMessageModel();
         message.setInstanceName(getInstanceName());
-        message.setAction(isSyncResponse ? "player_sync_ok" : "player_sync");
+        message.setAction(action);
         List<PlayerModel> players = new ArrayList<>();
-        for (Player player : plugin.getServer().getOnlinePlayers()) {
-            players.add(PlayerModel.fromPlayer(player));
+        if (action.equals(Constants.Actions.Instances.Sync) || action.equals(Constants.Actions.Instances.Sync_OK)) {
+            for (Player player : plugin.getServer().getOnlinePlayers()) {
+                players.add(PlayerModel.fromPlayer(player));
+            }
         }
         message.setPlayers(players);
-        messenger.send(Constants.PLAYER_UPDATES_CHANNEL_NAME, message.toString());
+        messenger.send(Constants.Channels.Main, message.toString());
     }
 
 
 
 
-    // public List<PlayerModel> getPlayersExcept(String instance) {
-    //     List<PlayerModel> players = new ArrayList<>();
-    //     for (String key : instances.keySet()) {
-    //         if (!key.equals(instance)) {
-    //             players.addAll(instances.get(key));
-    //         }
-    //     }
-    //     return players;
-    // }
+    private List<PlayerModel> getPlayersFromOtherInstances() {
+        List<PlayerModel> players = new ArrayList<>();
+        for (String key : instances.keySet()) {
+            if (!key.equals(getInstanceName())) {
+                players.addAll(instances.get(key));
+            }
+        }
+        return players;
+    }
 
     public void log() {
         plugin.getLogger().info(" ====================================");

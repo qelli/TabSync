@@ -24,30 +24,17 @@ public class TabListManager {
         this.plugin = plugin;
     }
 
-    // public void addPlayer(Player player) {
-    //     ProtocolLibUtil.sendPacketToAll(
-    //         ProtocolLibUtil.createTabListAddPacket(
-    //             player.getUniqueId(),
-    //             player.getName(),
-    //             getSkin(player.getUniqueId())
-    //         )
-    //     );
-    // }
-    // public void addPlayers(List<PlayerModel> players) {
-    //     ProtocolLibUtil.sendPacketToAll(
-    //         ProtocolLibUtil.createTabListAddPacket(players)
-    //     );
-    // }
-    // public void removePlayer(Player player) {
-    //     // Remove player from tab list
-    // }
-    // public void removePlayer(UUID uuid) {
+    public void addFakePlayers(List<PlayerModel> players) {
+        ProtocolLibUtil.sendPacketToAll(
+            ProtocolLibUtil.createTabListAddPacket(players)
+        );
+    }
 
-    // }
-
-    // public void syncPlayers() {
-        
-    // }
+    public void updateFakePlayers(List<PlayerModel> players) {
+        ProtocolLibUtil.sendPacketToAll(
+            ProtocolLibUtil.createTabListUpdatePacket(players)
+        );
+    }
 
     // TODO: I may need some sleep -- move somewhere else??
     private String getSkin(UUID uuid) {
