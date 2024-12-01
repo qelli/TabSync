@@ -1,14 +1,14 @@
-package dev.qelli.minecraft.tabSync;
+package dev.qelli.minecraft.xserversync;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import dev.qelli.minecraft.tabSync.listeners.PlayerEventListener;
-import dev.qelli.minecraft.tabSync.managers.ChatManager;
-import dev.qelli.minecraft.tabSync.managers.InstanceManager;
-import dev.qelli.minecraft.tabSync.managers.TabListManager;
+import dev.qelli.minecraft.xserversync.listeners.PlayerEventListener;
+import dev.qelli.minecraft.xserversync.managers.ChatManager;
+import dev.qelli.minecraft.xserversync.managers.InstanceManager;
+import dev.qelli.minecraft.xserversync.managers.TabListManager;
 
 public final class TabSync extends JavaPlugin {
 
@@ -49,7 +49,7 @@ public final class TabSync extends JavaPlugin {
         });
 
         // ONLY FOR DEV PURPOSES
-        getCommand("tabsync").setExecutor(new CommandExecutor() {
+        getCommand("XServerSync").setExecutor(new CommandExecutor() {
             @Override
             public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
                 if(args.length < 1) {

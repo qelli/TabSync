@@ -1,4 +1,4 @@
-package dev.qelli.minecraft.tabSync.listeners;
+package dev.qelli.minecraft.xserversync.listeners;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -6,8 +6,8 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import dev.qelli.minecraft.tabSync.TabSync;
-import dev.qelli.minecraft.tabSync.messenger.models.PlayerModel;
+import dev.qelli.minecraft.xserversync.XServerSync;
+import dev.qelli.minecraft.xserversync.messenger.models.PlayerModel;
 
 public class PlayerEventListener implements Listener {
     

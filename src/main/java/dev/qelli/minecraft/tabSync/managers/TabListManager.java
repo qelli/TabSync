@@ -1,4 +1,4 @@
-package dev.qelli.minecraft.tabSync.managers;
+package dev.qelli.minecraft.xserversync.managers;
 
 import java.io.IOException;
 import java.net.URI;
@@ -12,9 +12,9 @@ import org.bukkit.entity.Player;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import dev.qelli.minecraft.tabSync.TabSync;
-import dev.qelli.minecraft.tabSync.messenger.models.PlayerModel;
-import dev.qelli.minecraft.tabSync.utils.ProtocolLibUtil;
+import dev.qelli.minecraft.xserversync.XServerSync;
+import dev.qelli.minecraft.xserversync.messenger.models.PlayerModel;
+import dev.qelli.minecraft.xserversync.utils.ProtocolLibUtil;
 
 public class TabListManager {
 

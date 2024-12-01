@@ -1,4 +1,4 @@
-package dev.qelli.minecraft.tabSync.utils;
+package dev.qelli.minecraft.xserversync.utils;
 
 import org.bukkit.entity.Player;
 

@@ -1,4 +1,4 @@
-package dev.qelli.minecraft.tabSync.managers;
+package dev.qelli.minecraft.xserversync.managers;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,11 +9,11 @@ import org.bukkit.entity.Player;
 
 import com.saicone.delivery4j.MessageChannel;
 
-import dev.qelli.minecraft.tabSync.TabSync;
-import dev.qelli.minecraft.tabSync.messenger.Messenger;
-import dev.qelli.minecraft.tabSync.messenger.models.PlayersUpdateMessageModel;
-import dev.qelli.minecraft.tabSync.utils.Constants;
-import dev.qelli.minecraft.tabSync.messenger.models.PlayerModel;
+import dev.qelli.minecraft.xserversync.XServerSync;
+import dev.qelli.minecraft.xserversync.messenger.Messenger;
+import dev.qelli.minecraft.xserversync.messenger.models.PlayersUpdateMessageModel;
+import dev.qelli.minecraft.xserversync.utils.Constants;
+import dev.qelli.minecraft.xserversync.messenger.models.PlayerModel;
 
 public class InstanceManager {
 

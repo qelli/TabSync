@@ -1,4 +1,4 @@
-package dev.qelli.minecraft.tabSync.messenger.models;
+package dev.qelli.minecraft.xserversync.messenger.models;
 
 import java.util.List;
 

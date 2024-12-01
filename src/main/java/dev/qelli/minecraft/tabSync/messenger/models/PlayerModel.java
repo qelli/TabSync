@@ -1,4 +1,4 @@
-package dev.qelli.minecraft.tabSync.messenger.models;
+package dev.qelli.minecraft.xserversync.messenger.models;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import dev.qelli.minecraft.tabSync.utils.PlayerUtils;
+import dev.qelli.minecraft.xserversync.utils.PlayerUtils;
 
 public class PlayerModel {
 

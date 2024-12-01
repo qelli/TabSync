@@ -1,10 +1,10 @@
-package dev.qelli.minecraft.tabSync.messenger;
+package dev.qelli.minecraft.xserversync.messenger;
 
 import com.saicone.delivery4j.AbstractMessenger;
 import com.saicone.delivery4j.Broker;
 import com.saicone.delivery4j.broker.RedisBroker;
 
-import dev.qelli.minecraft.tabSync.TabSync;
+import dev.qelli.minecraft.xserversync.XServerSync;
 
 public class Messenger extends AbstractMessenger {
 

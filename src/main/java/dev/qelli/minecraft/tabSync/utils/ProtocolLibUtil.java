@@ -1,4 +1,4 @@
-package dev.qelli.minecraft.tabSync.utils;
+package dev.qelli.minecraft.xserversync.utils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,7 +15,7 @@ import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.comphenix.protocol.wrappers.EnumWrappers.NativeGameMode;
 
-import dev.qelli.minecraft.tabSync.messenger.models.PlayerModel;
+import dev.qelli.minecraft.xserversync.messenger.models.PlayerModel;
 
 import com.comphenix.protocol.wrappers.PlayerInfoData;
 import com.comphenix.protocol.wrappers.WrappedGameProfile;

@@ -1,8 +1,8 @@
-package dev.qelli.minecraft.tabSync.managers;
+package dev.qelli.minecraft.xserversync.managers;
 
 import java.util.List;
-import dev.qelli.minecraft.tabSync.TabSync;
-import dev.qelli.minecraft.tabSync.messenger.models.PlayerModel;
+import dev.qelli.minecraft.xserversync.XServerSync;
+import dev.qelli.minecraft.xserversync.messenger.models.PlayerModel;
 
 public class ChatManager {
     private TabSync plugin;

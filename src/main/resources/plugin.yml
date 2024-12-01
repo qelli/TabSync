@@ -1,6 +1,6 @@
-name: TabSync
+name: XServerSync
 version: '1.0-SNAPSHOT'
-main: dev.qelli.minecraft.tabSync.TabSync
+main: dev.qelli.minecraft.xserversync.XServerSync
 api-version: '1.21'
 load: STARTUP
 # depend: [TAB]
@@ -8,7 +8,7 @@ depend: [ ProtocolLib ]
 authors: [ blithe_kitsune <https://qelli.dev> ]
 website: https://qelli.dev
 commands:
-  log:
-    description: TabSync command
-    usage: /log
-    permission: tabsync.command
+  xserversync:
+    description: XServerSync Admin suite
+    usage: /xserversync
+    permission: XServerSync.admin
