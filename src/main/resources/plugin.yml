@@ -3,7 +3,7 @@ version: '1.0-SNAPSHOT'
 main: dev.qelli.minecraft.xserversync.XServerSync
 api-version: '1.21'
 load: STARTUP
-# depend: [TAB]
+softdepend: [ TAB ]
 depend: [ ProtocolLib ]
 authors: [ blithe_kitsune <https://qelli.dev> ]
 website: https://qelli.dev
