@@ -1,10 +1,8 @@
 package dev.qelli.minecraft.xserversync;
 
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import dev.qelli.minecraft.xserversync.commands.XServerSyncCommand;
 import dev.qelli.minecraft.xserversync.listeners.PlayerEventListener;
 import dev.qelli.minecraft.xserversync.managers.ChatManager;
 import dev.qelli.minecraft.xserversync.managers.InstanceManager;
@@ -48,23 +46,8 @@ public final class XServerSync extends JavaPlugin {
             instanceManager.load();
         });
 
-        // ONLY FOR DEV PURPOSES
-        getCommand("XServerSync").setExecutor(new CommandExecutor() {
-            @Override
-            public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-                if(args.length < 1) {
-                    getInstanceManager().log();
-                    return false;
-                }
-                switch(args[0]) {
-                    case "load":
-                        getLogger().info("Sending sync message...");
-                        instanceManager.load();
-                        return true;
-                }
-                return false;
-            }
-        });
+        new XServerSyncCommand(this);
+
     }
 
     @Override

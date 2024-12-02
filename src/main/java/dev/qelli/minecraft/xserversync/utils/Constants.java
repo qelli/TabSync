@@ -2,6 +2,10 @@ package dev.qelli.minecraft.xserversync.utils;
 
 public class Constants {
 
+    public static class Permissions {
+        public static final String Admin = "xserversync.admin";
+    }
+
     public static class Channels {
         public static final String Main = "tab_sync";
     }
@@ -18,6 +22,12 @@ public class Constants {
             public static final String Sync = "instance.sync";
             public static final String Sync_OK = "instance.sync_ok";
             public static final String Sync_EXIT = "instance.sync_exit";
+        }
+
+        public static class Commands {
+            public static final String Reload = "reload";
+            public static final String Init = "init";
+            public static final String Log = "log";
         }
     }
 

@@ -11,4 +11,5 @@ commands:
   xserversync:
     description: XServerSync Admin suite
     usage: /xserversync
-    permission: XServerSync.admin
+    permission: xserversync.admin
+    aliases: [ xss, xsync]

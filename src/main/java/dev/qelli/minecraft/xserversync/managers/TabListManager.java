@@ -8,7 +8,6 @@ import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.UUID;
 
-import org.bukkit.entity.Player;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
