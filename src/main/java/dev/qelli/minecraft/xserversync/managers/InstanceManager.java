@@ -31,8 +31,8 @@ public class InstanceManager {
 
     public void init() {
         instances.put(getInstanceName(), new ArrayList<>());
-        messenger.start();
         initListeners();
+        messenger.start();
     }
 
     /*
