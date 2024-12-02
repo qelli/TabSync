@@ -1,13 +1,14 @@
 debug: false
+
 messages:
   player_join: '&e%player% joined the game'
   player_quit: '&e%player% left the game'
+
 instance:
   id: '1'
   name: 'instance1'
+
 connection: 
   type: 'redis'
-  url: 'redis://<user>:<pass>@<host>:<port>/'
-  poll: 1000
-  socket-timeout: 5000
-  connection-timeout: 5000
+  redis:
+    url: 'redis://<user>:<pass>@<host>:<port>/'

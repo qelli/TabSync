@@ -78,7 +78,7 @@
         <dependency>
             <groupId>com.github.NEZNAMY</groupId>
             <artifactId>TAB-API</artifactId>
-            <version>5.0.0</version>
+            <version>5.0.2</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -90,6 +90,12 @@
         <dependency>
             <groupId>com.saicone.delivery4j</groupId>
             <artifactId>broker-redis</artifactId>
+            <version>1.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.saicone.delivery4j</groupId>
+            <artifactId>extension-guava</artifactId>
             <version>1.1</version>
             <scope>compile</scope>
         </dependency>
