@@ -29,9 +29,9 @@ public class TabListManager {
         );
     }
 
-    public void updateFakePlayers(List<PlayerModel> players) {
+    public void removeFakePlayers(List<PlayerModel> players) {
         ProtocolLibUtil.sendPacketToAll(
-            ProtocolLibUtil.createTabListUpdatePacket(players)
+            ProtocolLibUtil.createTabListRemovePacket(players)
         );
     }
 

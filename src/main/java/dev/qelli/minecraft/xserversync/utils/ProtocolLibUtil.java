@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -11,6 +12,7 @@ import org.bukkit.entity.Player;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketContainer;
+import com.comphenix.protocol.wrappers.Converters;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.comphenix.protocol.wrappers.EnumWrappers.NativeGameMode;
 
@@ -51,37 +53,14 @@ public class ProtocolLibUtil {
         return packet;
     }
 
-    // TODO: Rework info_action -- not working
-    public static PacketContainer createTabListUpdatePacket(List<PlayerModel> players) {
-        PacketContainer packet = ProtocolLibrary.getProtocolManager().createPacket(PacketType.Play.Server.PLAYER_INFO);
-        EnumSet<EnumWrappers.PlayerInfoAction> actions = EnumSet.of(
-            EnumWrappers.PlayerInfoAction.UPDATE_LATENCY,
-            EnumWrappers.PlayerInfoAction.UPDATE_LISTED
-        );
-        packet.getPlayerInfoActions().write(0, actions);
+    public static PacketContainer createTabListRemovePacket(List<PlayerModel> players) {
+        PacketContainer packet = ProtocolLibrary.getProtocolManager().createPacket(PacketType.Play.Server.PLAYER_INFO_REMOVE);
 
-        List<PlayerInfoData> data = new ArrayList<>();
-        for (PlayerModel player : players) {
-            WrappedGameProfile gameProfile = new WrappedGameProfile(player.getUuid(), player.getName());
-            gameProfile.getProperties().put("textures", new WrappedSignedProperty("textures", player.getSkin(), UUID.randomUUID().toString()));
-            data.add(new PlayerInfoData(
-                    player.getUuid(),
-                    20,
-                    true,
-                    NativeGameMode.SURVIVAL,
-                    gameProfile,
-                    null,
-                    (WrappedRemoteChatSessionData) null));
-            
-        }
+        List<UUID> uuids = players.stream().map(PlayerModel::getUuid).collect(Collectors.toList());
+        packet.getLists(Converters.passthrough(UUID.class)).write(0, uuids);
 
-        packet.getPlayerInfoDataLists().write(1, data);
         return packet;
     }
-
-    // public static PacketContainer createTabListAddPacket(UUID uuid, String name, String skin) {
-    //     return createTabListAddPacket(Collections.singletonList(new PlayerModel(uuid, name, skin)));
-    // }
 
     public static void sendPacketToPlayer(Player player, PacketContainer packet) {
         try {

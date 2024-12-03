@@ -67,7 +67,7 @@ public class InstanceManager {
                     break;
                 case Constants.Actions.Players.Quit:
                     instances.get(message.getInstanceName()).removeAll(message.getPlayers());
-                    plugin.getTabListManager().updateFakePlayers(getPlayersFromOtherInstances());
+                    plugin.getTabListManager().removeFakePlayers(message.getPlayers());
                     plugin.getChatManager().sendPlayersQuit(message.getPlayers());
                     break;
                 case Constants.Actions.Instances.Sync:
@@ -89,7 +89,11 @@ public class InstanceManager {
     /*
      * When a player joins the current instance
      * must be added to the current instance
-     * and send a message to others
+     * and send a message to others.
+     * 
+     * Also, this is where the new player should receive
+     * the packet to add the existing players from other instances
+     * into their current tab list.
      */
     public void playerJoined(PlayerModel player) {
         instances.get(getInstanceName()).addAll(List.of(player));
@@ -98,6 +102,7 @@ public class InstanceManager {
         message.setAction(Constants.Actions.Players.Join);
         message.setPlayers(List.of(player));
         messenger.send(Constants.Channels.Main, message.toString());
+        plugin.getTabListManager().addFakePlayers(getPlayersFromOtherInstances());
     }
 
     /*
