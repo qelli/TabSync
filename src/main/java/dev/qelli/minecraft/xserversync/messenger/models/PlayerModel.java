@@ -4,35 +4,60 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import dev.qelli.minecraft.xserversync.utils.ChatUtils;
 import dev.qelli.minecraft.xserversync.utils.PlayerUtils;
+import dev.qelli.minecraft.xserversync.utils.TabAPIUtils;
+import me.clip.placeholderapi.PlaceholderAPI;
+import me.neznamy.tab.api.TabPlayer;
 
 public class PlayerModel {
 
     private UUID uuid;
     private String name;
+    private String displayName;
+    private String group;
+    private Integer listOrder;
     private String skin;
 
     public static PlayerModel fromPlayer(Player player) {
-        return new PlayerModelBuilder()
-            .setName(player.getName())
-            .setSkin(PlayerUtils.getPlayerSkin(player))
-            .setUuid(player.getUniqueId())
-            .build();
+        PlayerModel playerModel = new PlayerModel();
+        playerModel.setName(player.getName());
+        playerModel.setDisplayName(PlayerUtils.getPlayerDisplayName(player));
+        playerModel.setSkin(PlayerUtils.getPlayerSkin(player));
+        playerModel.setGroup(PlayerUtils.getPlayerGroup(player.getUniqueId()));
+        playerModel.setListOrder(0);
+        playerModel.setUuid(player.getUniqueId());
+        return playerModel;
+    }
+
+    public static PlayerModel fromTabPlayer(TabPlayer tabPlayer, Player bukkitPlayer) {
+        PlayerModel player = new PlayerModel();
+        player.setUuid(tabPlayer.getUniqueId());
+        player.setName(tabPlayer.getName());
+        player.setGroup(PlayerUtils.getPlayerGroup(tabPlayer.getUniqueId()));
+        player.setDisplayName(ChatUtils.withColor(PlaceholderAPI.setPlaceholders(bukkitPlayer, TabAPIUtils.getOriginalName(tabPlayer))));
+        player.setListOrder(0);
+        player.setSkin("");
+        return player;
     }
 
     public static List<PlayerModel> fromJSONArray(JSONArray jsonArray) {
         List<PlayerModel> playerModels = new ArrayList<>();
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject jsonObject = jsonArray.getJSONObject(i);
-            playerModels.add(new PlayerModelBuilder()
-                .setUuid(UUID.fromString(jsonObject.getString("uuid")))
-                .setName(jsonObject.getString("name"))
-                .setSkin(jsonObject.getString("skin"))
-                .build());
+            PlayerModel player = new PlayerModel();
+            player.setUuid(UUID.fromString(jsonObject.getString("uuid")));
+            player.setName(jsonObject.getString("name"));
+            player.setGroup(jsonObject.getString("group"));
+            player.setDisplayName(jsonObject.getString("displayName"));
+            player.setListOrder(jsonObject.getInt("listOrder"));
+            player.setSkin(jsonObject.getString("skin"));
+            playerModels.add(player);
         }
         return playerModels;
     }
@@ -45,12 +70,19 @@ public class PlayerModel {
         return jsonArray.toString();
     }
 
+    public OfflinePlayer toPlayer() {
+        return PlayerUtils.getPlayerByUUID(uuid);
+    }
+
     public String toString() {
         return new JSONObject()
                 .put("uuid", uuid.toString())
                 .put("name", name)
+                .put("displayName", displayName)
+                .put("group", group)
+                .put("listOrder", listOrder)
                 .put("skin", skin)
-                .toString();
+            .toString();
     }
 
     public boolean equals(Object o) {
@@ -59,11 +91,12 @@ public class PlayerModel {
         if (o == null || getClass() != o.getClass())
             return false;
         PlayerModel playerModel = (PlayerModel) o;
+        // TODO: Do I really need to compare UUIDs as strings?
         if (getUuid().toString().equals(playerModel.getUuid().toString()))
             return true;
         return false;
     }
-        
+
     public UUID getUuid() {
         return uuid;
     }
@@ -80,6 +113,23 @@ public class PlayerModel {
         this.name = name;
     }
 
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+    
+    public Integer getListOrder() {
+        return listOrder;
+    }
+
+    public void setListOrder(Integer listOrder) {
+        this.listOrder = listOrder;
+    }
+
+
     public String getSkin() {
         return skin;
     }
@@ -87,34 +137,13 @@ public class PlayerModel {
     public void setSkin(String skin) {
         this.skin = skin;
     }
+
+    public String getGroup() {
+        return group;
+    }
+
+    public void setGroup(String group) {
+        this.group = group;
+    }
     
-}
-
-class PlayerModelBuilder {
-    private UUID uuid;
-    private String name;
-    private String skin;
-
-    public PlayerModelBuilder setUuid(UUID uuid) {
-        this.uuid = uuid;
-        return this;
-    }
-
-    public PlayerModelBuilder setName(String name) {
-        this.name = name;
-        return this;
-    }
-
-    public PlayerModelBuilder setSkin(String skin) {
-        this.skin = skin;
-        return this;
-    }
-
-    public PlayerModel build() {
-        PlayerModel playerModel = new PlayerModel();
-        playerModel.setUuid(this.uuid);
-        playerModel.setName(this.name);
-        playerModel.setSkin(this.skin);
-        return playerModel;
-    }
 }

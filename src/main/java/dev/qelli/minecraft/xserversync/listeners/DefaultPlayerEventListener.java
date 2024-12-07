@@ -9,11 +9,11 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import dev.qelli.minecraft.xserversync.XServerSync;
 import dev.qelli.minecraft.xserversync.messenger.models.PlayerModel;
 
-public class PlayerEventListener implements Listener {
-    
+public class DefaultPlayerEventListener implements Listener {
+
     XServerSync plugin;
 
-    public PlayerEventListener(XServerSync plugin) {
+    public DefaultPlayerEventListener(XServerSync plugin) {
         this.plugin = plugin;
     }
 

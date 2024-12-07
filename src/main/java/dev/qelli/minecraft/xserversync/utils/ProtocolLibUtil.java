@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import com.comphenix.protocol.PacketType;
@@ -19,36 +18,44 @@ import com.comphenix.protocol.wrappers.EnumWrappers.NativeGameMode;
 import dev.qelli.minecraft.xserversync.messenger.models.PlayerModel;
 
 import com.comphenix.protocol.wrappers.PlayerInfoData;
+import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.comphenix.protocol.wrappers.WrappedGameProfile;
 import com.comphenix.protocol.wrappers.WrappedRemoteChatSessionData;
-import com.comphenix.protocol.wrappers.WrappedSignedProperty;
 
 public class ProtocolLibUtil {
 
+    public static void sendUpdateListedPlayersPackets(List<PlayerModel> players) {
+        sendPacketToAll(createTabListRemovePacket(players));
+        sendPacketToAll(createTabListAddPacket(players));
+    }
+
     public static PacketContainer createTabListAddPacket(List<PlayerModel> players) {
         PacketContainer packet = ProtocolLibrary.getProtocolManager().createPacket(PacketType.Play.Server.PLAYER_INFO);
-        // TODO: Validate if all these properties are needed at once
         EnumSet<EnumWrappers.PlayerInfoAction> actions = EnumSet.of(
                 EnumWrappers.PlayerInfoAction.ADD_PLAYER,
                 EnumWrappers.PlayerInfoAction.UPDATE_LATENCY,
-                EnumWrappers.PlayerInfoAction.UPDATE_LISTED);
+                EnumWrappers.PlayerInfoAction.UPDATE_LISTED,
+                EnumWrappers.PlayerInfoAction.UPDATE_DISPLAY_NAME
+                // EnumWrappers.PlayerInfoAction.UPDATE_LIST_ORDER // AVAILABLE UNTIL ProtocolLib@5.4.0
+            );
         packet.getPlayerInfoActions().write(0, actions);
 
         List<PlayerInfoData> data = new ArrayList<>();
         for (PlayerModel player : players) {
             WrappedGameProfile gameProfile = new WrappedGameProfile(player.getUuid(), player.getName());
-            gameProfile.getProperties().put("textures", new WrappedSignedProperty("textures", player.getSkin(), UUID.randomUUID().toString()));
-            data.add(new PlayerInfoData(
-                    player.getUuid(),
-                    20,
-                    true,
-                    NativeGameMode.SURVIVAL,
-                    gameProfile,
-                    null,
-                    (WrappedRemoteChatSessionData) null));
-            
+            WrappedChatComponent displayName = WrappedChatComponent.fromText(player.getDisplayName());
+            // TODO: Might need to be readjusted once the official 1.21.3 support for ProtocolLib is released (temptative 5.4.0)
+            PlayerInfoData playerInfoData = new PlayerInfoData(
+                player.getUuid(),
+                20,
+                true,
+                NativeGameMode.SURVIVAL,
+                gameProfile,
+                displayName,
+                (WrappedRemoteChatSessionData) null
+            );
+            data.add(playerInfoData);
         }
-
         packet.getPlayerInfoDataLists().write(1, data);
         return packet;
     }
@@ -71,8 +78,10 @@ public class ProtocolLibUtil {
     }
 
     public static void sendPacketToAll(PacketContainer packet) {
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            sendPacketToPlayer(player, packet);
+        try {
+            ProtocolLibrary.getProtocolManager().broadcastServerPacket(packet);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

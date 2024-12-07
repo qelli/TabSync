@@ -23,7 +23,7 @@ public class XServerSyncCommand implements CommandExecutor, TabCompleter {
         PluginCommand command = plugin.getCommand("xserversync");
         command.setExecutor(this);
         command.setAliases(List.of("xss", "xsync"));
-        command.setPermission(Constants.Permissions.Admin);
+        // command.setPermission(Constants.Permissions.Admin);
         command.setTabCompleter(this);
     }
 

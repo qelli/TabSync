@@ -1,6 +1,7 @@
 package dev.qelli.minecraft.xserversync.managers;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,19 +56,21 @@ public class InstanceManager {
     public void initListeners() {
         MessageChannel channel = messenger.subscribe(Constants.Channels.Main).consume((channelName, messages) -> {
             PlayersUpdateMessageModel message = PlayersUpdateMessageModel.fromString(messages[0]);
-            plugin.getLogger().info("Instance " + message.getInstanceName() + " said " + message.getAction());
+            plugin.getLogger().info(message.getInstanceName() + " said: " + message.getAction());
             switch(message.getAction()) {
                 case Constants.Actions.Players.Message:
                     // TODO: Implement
                     break;
                 case Constants.Actions.Players.Join:
+                    plugin.getTabListManager().cleanList(getAllPlayers());
                     instances.get(message.getInstanceName()).addAll(message.getPlayers());
-                    plugin.getTabListManager().addFakePlayers(message.getPlayers());
+                    plugin.getTabListManager().addToList(getAllPlayersOrderByGroup());
                     plugin.getChatManager().sendPlayersJoin(message.getPlayers());
                     break;
                 case Constants.Actions.Players.Quit:
+                    plugin.getTabListManager().cleanList(getAllPlayers());
                     instances.get(message.getInstanceName()).removeAll(message.getPlayers());
-                    plugin.getTabListManager().removeFakePlayers(message.getPlayers());
+                    plugin.getTabListManager().addToList(getAllPlayersOrderByGroup());
                     plugin.getChatManager().sendPlayersQuit(message.getPlayers());
                     break;
                 case Constants.Actions.Instances.Sync:
@@ -102,7 +105,8 @@ public class InstanceManager {
         message.setAction(Constants.Actions.Players.Join);
         message.setPlayers(List.of(player));
         messenger.send(Constants.Channels.Main, message.toString());
-        plugin.getTabListManager().addFakePlayers(getPlayersFromOtherInstances());
+        plugin.getTabListManager().cleanList(getAllPlayers());
+        plugin.getTabListManager().addToList(getAllPlayersOrderByGroup());
     }
 
     /*
@@ -123,10 +127,30 @@ public class InstanceManager {
         // TODO: Implement
     }
 
+    public List<PlayerModel> getAllPlayers() {
+        List<PlayerModel> players = new ArrayList<>();
+        for (String key : instances.keySet()) {
+            players.addAll(instances.get(key));
+        }
+        return players;
+    }
 
+    public List<PlayerModel> getInstancePlayers() {
+        return instances.get(getInstanceName());
+    }
 
+    private List<PlayerModel> getAllPlayersOrderByGroup() {
+        List<String> groups = plugin.getConfig().getStringList("tabapi.groups");
+        // Revert groups so the higher the group, the higher the listOrder
+        Collections.reverse(groups);
 
-
+        // Iterate over players to update their listOrder
+        List<PlayerModel> players = getAllPlayers();
+        for (PlayerModel player : players) {
+            player.setListOrder(groups.indexOf(player.getGroup()));
+        }
+        return players;
+    }
 
     private void sendSyncMessage(String action) {
         PlayersUpdateMessageModel message = new PlayersUpdateMessageModel();
@@ -142,28 +166,15 @@ public class InstanceManager {
         messenger.send(Constants.Channels.Main, message.toString());
     }
 
-
-
-
-    private List<PlayerModel> getPlayersFromOtherInstances() {
-        List<PlayerModel> players = new ArrayList<>();
-        for (String key : instances.keySet()) {
-            if (!key.equals(getInstanceName())) {
-                players.addAll(instances.get(key));
-            }
-        }
-        return players;
-    }
-
     public void log() {
-        plugin.getLogger().info(" ====================================");
+        plugin.getLogger().info(" ================== XSS PLUGIN LOG ==================");
         for (String key : instances.keySet()) {
-            plugin.getLogger().info("Instance: " + key);
+            plugin.getLogger().info("= " + key);
             for (PlayerModel player : instances.get(key)) {
-                plugin.getLogger().info("=> Player: " + player.getName());
+                plugin.getLogger().info("=    " + player.getName());
             }
         }
-        plugin.getLogger().info(" ====================================");
+        plugin.getLogger().info(" ===================================================");
     }
 
     public boolean isReady() {

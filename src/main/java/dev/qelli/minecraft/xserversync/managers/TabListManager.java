@@ -23,15 +23,15 @@ public class TabListManager {
         this.plugin = plugin;
     }
 
-    public void addFakePlayers(List<PlayerModel> players) {
+    public void cleanList(List<PlayerModel> allPlayers) {
         ProtocolLibUtil.sendPacketToAll(
-            ProtocolLibUtil.createTabListAddPacket(players)
+            ProtocolLibUtil.createTabListRemovePacket(allPlayers)
         );
     }
 
-    public void removeFakePlayers(List<PlayerModel> players) {
+    public void addToList(List<PlayerModel> players) {
         ProtocolLibUtil.sendPacketToAll(
-            ProtocolLibUtil.createTabListRemovePacket(players)
+            ProtocolLibUtil.createTabListAddPacket(players)
         );
     }
 

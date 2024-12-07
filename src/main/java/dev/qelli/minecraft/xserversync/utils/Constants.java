@@ -2,12 +2,19 @@ package dev.qelli.minecraft.xserversync.utils;
 
 public class Constants {
 
+    public static class Placeholders {
+        public static final String InstanceName = "instancename";
+        public static final String GlobalPlayers = "globalplayers";
+        public static final String InstancePlayers = "instanceplayers";
+        public static final String FullPlayerName = "fullplayername";
+    }
+
     public static class Permissions {
         public static final String Admin = "xserversync.admin";
     }
 
     public static class Channels {
-        public static final String Main = "tab_sync";
+        public static final String Main = "xserversync:main";
     }
 
     public static class Actions {

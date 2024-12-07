@@ -2,10 +2,9 @@ name: XServerSync
 version: '1.0-SNAPSHOT'
 main: dev.qelli.minecraft.xserversync.XServerSync
 api-version: '1.21'
-load: STARTUP
-softdepend: [ TAB ]
+softdepend: [ TAB, PlaceholderAPI ]
 depend: [ ProtocolLib ]
-authors: [ blithe_kitsune <https://qelli.dev> ]
+authors: [ blithe_kitsune ]
 website: https://qelli.dev
 commands:
   xserversync:

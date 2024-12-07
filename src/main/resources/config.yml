@@ -1,12 +1,54 @@
 debug: false
 
+# Use one of the following
+# - 'default'
+# - 'luckyperms'
+permissions:
+  provider: 'luckyperms'
+  groups:
+    - owner
+    - lider
+    - sadmin
+    - admin
+    - manager
+    - smod
+    - mod
+    - developer
+    - builder
+    - shelper
+    - helper
+    - tutor
+    - marketing
+    - famoso
+    - youtuber
+    - miniyt
+    - customa1
+    - latam+
+    - latam
+    - emerald
+    - diamond
+    - gold
+    - iron
+    - ironn
+    - usuario
+    - default
+
+tablist:
+  provider: 'default' # 'default' / 'TAB_PLUGIN'
+
+# When enabled the plugin will use the
+# PlaceholderAPI to format the name in how
+# the player is added to the tablist
+placeholderapi: false
+
 messages:
+  enabled: false
   player_join: '&e%player% joined the game'
   player_quit: '&e%player% left the game'
 
 instance:
-  id: '1'
-  name: 'instance1'
+  id: 1
+  name: 'instance-name'
 
 connection: 
   type: 'redis'
