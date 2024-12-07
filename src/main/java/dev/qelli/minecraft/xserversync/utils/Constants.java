@@ -33,7 +33,7 @@ public class Constants {
 
         public static class Commands {
             public static final String Reload = "reload";
-            public static final String Init = "init";
+            public static final String Sync = "sync";
             public static final String Log = "log";
         }
     }

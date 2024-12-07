@@ -34,7 +34,7 @@ public class XServerSyncCommand implements CommandExecutor, TabCompleter {
         }
         if (args.length == 1) {
             return List.of(
-                Constants.Actions.Commands.Init,
+                Constants.Actions.Commands.Sync,
                 Constants.Actions.Commands.Log,
                 Constants.Actions.Commands.Reload
             );
@@ -52,8 +52,8 @@ public class XServerSyncCommand implements CommandExecutor, TabCompleter {
         }
 
         switch (args[0]) {
-            case Constants.Actions.Commands.Init:
-                plugin.getInstanceManager().load();
+            case Constants.Actions.Commands.Sync:
+                plugin.getInstanceManager().sync();
                 return true;
             case Constants.Actions.Commands.Log:
                 plugin.getInstanceManager().log();

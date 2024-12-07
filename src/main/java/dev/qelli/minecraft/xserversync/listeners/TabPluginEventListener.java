@@ -2,13 +2,14 @@ package dev.qelli.minecraft.xserversync.listeners;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.Listener;
 
 import dev.qelli.minecraft.xserversync.XServerSync;
 import dev.qelli.minecraft.xserversync.messenger.models.PlayerModel;
 import me.neznamy.tab.api.TabAPI;
 import me.neznamy.tab.api.event.player.PlayerLoadEvent;
 
-public class TabPluginEventListener {
+public class TabPluginEventListener implements Listener {
 
     XServerSync plugin;
     

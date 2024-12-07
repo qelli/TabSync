@@ -58,11 +58,9 @@ public final class XServerSync extends JavaPlugin {
         tabListManager = new TabListManager(this);
         chatManager = new ChatManager(this);
 
-        getServer().getPluginManager().registerEvents(new DefaultPlayerEventListener(this), this);
-
-        // Not exactly a load but more like a sync
+        // Sends a sync message to other instances
         getServer().getScheduler().runTask(this, () -> {
-            instanceManager.load();
+            instanceManager.sync();
         });
 
         new XServerSyncCommand(this);
@@ -124,10 +122,10 @@ public final class XServerSync extends JavaPlugin {
                     disablePlugin("TabList provider was set to 'TAB_PLUGIN' but the plugin was not found.");
                     return;
                 }
-                new TabPluginEventListener(this);
+                getServer().getPluginManager().registerEvents(new TabPluginEventListener(this), this);
                 break;
             default:
-                new DefaultPlayerEventListener(this);
+                getServer().getPluginManager().registerEvents(new DefaultPlayerEventListener(this), this);
                 break;
         }
     }

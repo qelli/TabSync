@@ -2,35 +2,10 @@ debug: false
 
 # Use one of the following
 # - 'default'
-# - 'luckyperms'
+# - 'luckperms'
 permissions:
-  provider: 'luckyperms'
+  provider: 'default'
   groups:
-    - owner
-    - lider
-    - sadmin
-    - admin
-    - manager
-    - smod
-    - mod
-    - developer
-    - builder
-    - shelper
-    - helper
-    - tutor
-    - marketing
-    - famoso
-    - youtuber
-    - miniyt
-    - customa1
-    - latam+
-    - latam
-    - emerald
-    - diamond
-    - gold
-    - iron
-    - ironn
-    - usuario
     - default
 
 tablist:

@@ -20,18 +20,23 @@ public class ChatManager {
         );
     }
 
+    // TODO: Check why join/leave differs
     public void sendPlayersJoin(List<PlayerModel> players) {
-        for (PlayerModel player : players) {
-            sendPlayerJoin(player);
+        if (plugin.getConfig().getBoolean("messages.enabled")) {
+            for (PlayerModel player : players) {
+                sendPlayerJoin(player);
+            }
         }
     }
 
     public void sendPlayerQuit(PlayerModel player) {
-        plugin.getServer().broadcastMessage(
-            ChatUtils.withColor(
-                plugin.getConfig().getString("messages.player_quit").replace("%player%", player.getName())
-            )
-        );
+        if (plugin.getConfig().getBoolean("messages.enabled")) {
+            plugin.getServer().broadcastMessage(
+                ChatUtils.withColor(
+                    plugin.getConfig().getString("messages.player_quit").replace("%player%", player.getName())
+                )
+            );
+        }
     }
 
     public void sendPlayersQuit(List<PlayerModel> players) {

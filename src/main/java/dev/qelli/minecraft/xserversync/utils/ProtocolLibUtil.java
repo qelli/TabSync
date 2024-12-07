@@ -21,13 +21,9 @@ import com.comphenix.protocol.wrappers.PlayerInfoData;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.comphenix.protocol.wrappers.WrappedGameProfile;
 import com.comphenix.protocol.wrappers.WrappedRemoteChatSessionData;
+import com.comphenix.protocol.wrappers.WrappedSignedProperty;
 
 public class ProtocolLibUtil {
-
-    public static void sendUpdateListedPlayersPackets(List<PlayerModel> players) {
-        sendPacketToAll(createTabListRemovePacket(players));
-        sendPacketToAll(createTabListAddPacket(players));
-    }
 
     public static PacketContainer createTabListAddPacket(List<PlayerModel> players) {
         PacketContainer packet = ProtocolLibrary.getProtocolManager().createPacket(PacketType.Play.Server.PLAYER_INFO);
@@ -43,18 +39,17 @@ public class ProtocolLibUtil {
         List<PlayerInfoData> data = new ArrayList<>();
         for (PlayerModel player : players) {
             WrappedGameProfile gameProfile = new WrappedGameProfile(player.getUuid(), player.getName());
+            gameProfile.getProperties().put("textures", new WrappedSignedProperty("textures", player.getSkin(), UUID.randomUUID().toString()));
             WrappedChatComponent displayName = WrappedChatComponent.fromText(player.getDisplayName());
             // TODO: Might need to be readjusted once the official 1.21.3 support for ProtocolLib is released (temptative 5.4.0)
-            PlayerInfoData playerInfoData = new PlayerInfoData(
-                player.getUuid(),
-                20,
-                true,
-                NativeGameMode.SURVIVAL,
-                gameProfile,
-                displayName,
-                (WrappedRemoteChatSessionData) null
-            );
-            data.add(playerInfoData);
+            data.add(new PlayerInfoData(
+                    player.getUuid(),
+                    20,
+                    true,
+                    NativeGameMode.SURVIVAL,
+                    gameProfile,
+                    displayName,
+                    (WrappedRemoteChatSessionData) null));
         }
         packet.getPlayerInfoDataLists().write(1, data);
         return packet;

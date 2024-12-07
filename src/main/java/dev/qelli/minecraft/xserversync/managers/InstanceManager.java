@@ -39,7 +39,7 @@ public class InstanceManager {
     /*
      * Used to tell other instances a new one is alive
      */
-    public void load() {
+    public void sync() {
         sendSyncMessage(Constants.Actions.Instances.Sync);
     }
 
@@ -99,13 +99,13 @@ public class InstanceManager {
      * into their current tab list.
      */
     public void playerJoined(PlayerModel player) {
+        plugin.getTabListManager().cleanList(getAllPlayers());
         instances.get(getInstanceName()).addAll(List.of(player));
         PlayersUpdateMessageModel message = new PlayersUpdateMessageModel();
         message.setInstanceName(getInstanceName());
         message.setAction(Constants.Actions.Players.Join);
         message.setPlayers(List.of(player));
         messenger.send(Constants.Channels.Main, message.toString());
-        plugin.getTabListManager().cleanList(getAllPlayers());
         plugin.getTabListManager().addToList(getAllPlayersOrderByGroup());
     }
 
@@ -171,7 +171,7 @@ public class InstanceManager {
         for (String key : instances.keySet()) {
             plugin.getLogger().info("= " + key);
             for (PlayerModel player : instances.get(key)) {
-                plugin.getLogger().info("=    " + player.getName());
+                plugin.getLogger().info("=   " + player.getListOrder() + " [" + player.getGroup() + "] " + player.getName());
             }
         }
         plugin.getLogger().info(" ===================================================");

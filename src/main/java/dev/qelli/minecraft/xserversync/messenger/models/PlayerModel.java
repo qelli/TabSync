@@ -28,7 +28,7 @@ public class PlayerModel {
         PlayerModel playerModel = new PlayerModel();
         playerModel.setName(player.getName());
         playerModel.setDisplayName(PlayerUtils.getPlayerDisplayName(player));
-        playerModel.setSkin(PlayerUtils.getPlayerSkin(player));
+        playerModel.setSkin(PlayerUtils.getSkin(player.getUniqueId()));
         playerModel.setGroup(PlayerUtils.getPlayerGroup(player.getUniqueId()));
         playerModel.setListOrder(0);
         playerModel.setUuid(player.getUniqueId());
@@ -40,9 +40,10 @@ public class PlayerModel {
         player.setUuid(tabPlayer.getUniqueId());
         player.setName(tabPlayer.getName());
         player.setGroup(PlayerUtils.getPlayerGroup(tabPlayer.getUniqueId()));
+        // TODO: Move placeholderapi usage to PlayerUtils
         player.setDisplayName(ChatUtils.withColor(PlaceholderAPI.setPlaceholders(bukkitPlayer, TabAPIUtils.getOriginalName(tabPlayer))));
         player.setListOrder(0);
-        player.setSkin("");
+        player.setSkin(PlayerUtils.getSkin(bukkitPlayer.getUniqueId()));
         return player;
     }
 
@@ -68,10 +69,6 @@ public class PlayerModel {
             jsonArray.put(player.toString());
         }
         return jsonArray.toString();
-    }
-
-    public OfflinePlayer toPlayer() {
-        return PlayerUtils.getPlayerByUUID(uuid);
     }
 
     public String toString() {
@@ -128,7 +125,6 @@ public class PlayerModel {
     public void setListOrder(Integer listOrder) {
         this.listOrder = listOrder;
     }
-
 
     public String getSkin() {
         return skin;
