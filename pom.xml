@@ -124,7 +124,7 @@
         <dependency>
             <groupId>com.github.saicone</groupId>
             <artifactId>mcode</artifactId>
-            <version>4ae11b448f</version>
+            <version>9aece41005</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
