@@ -1,7 +1,7 @@
 name: XServerSync
 version: '1.0-SNAPSHOT'
 main: dev.qelli.minecraft.xserversync.XServerSync
-api-version: '1.21'
+api-version: '1.13'
 softdepend: [ TAB, PlaceholderAPI ]
 depend: [ ProtocolLib ]
 authors: [ blithe_kitsune ]
