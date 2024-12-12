@@ -1,11 +1,15 @@
 package dev.qelli.minecraft.xserversync.utils;
 
-import org.bukkit.ChatColor;
+import com.saicone.mcode.util.text.MStrings;
 
 public class ChatUtils {
+
+    static {
+        MStrings.BUNGEE_HEX = true;
+    }
     
     public static String withColor(String message) {
-        return ChatColor.translateAlternateColorCodes('&', message);
+        return MStrings.color(message);
     }
 
 }

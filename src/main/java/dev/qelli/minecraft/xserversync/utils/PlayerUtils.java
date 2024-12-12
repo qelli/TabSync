@@ -1,17 +1,10 @@
 package dev.qelli.minecraft.xserversync.utils;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
-import org.json.JSONArray;
-import org.json.JSONObject;
+
+import com.saicone.mcode.bukkit.util.SkullTexture;
 
 import dev.qelli.minecraft.xserversync.XServerSync;
 import net.luckperms.api.LuckPerms;
@@ -51,32 +44,8 @@ public class PlayerUtils {
         return player.getName();
     }
 
-    // This may probably need caching
-    public static String getSkin(UUID uuid) {
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-            .uri(URI.create("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid.toString()))
-            .build();
-
-        try {
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            if (response.statusCode() == 200) {
-                JSONObject jsonResponse = new JSONObject(response.body());
-                JSONArray properties = jsonResponse.getJSONArray("properties");
-                for (int i = 0; i < properties.length(); i++) {
-                    JSONObject property = properties.getJSONObject(i);
-                    if (property.getString("name").equals("textures")) {
-                        return property.getString("value");
-                    }
-                }
-            } else {
-                XServerSync.getInstance().getLogger().warning("Failed to get skin for UUID: " + uuid + ". Status code: " + response.statusCode());
-            }
-        } catch (IOException | InterruptedException e) {
-            XServerSync.getInstance().getLogger().severe("Error while getting skin for UUID: " + uuid);
-            e.printStackTrace();
-        }
-        return "";
+    public static String getSkinByPlayerName(String playerName) {
+        return SkullTexture.craftHead().textureFrom(playerName);
     }
 
 }

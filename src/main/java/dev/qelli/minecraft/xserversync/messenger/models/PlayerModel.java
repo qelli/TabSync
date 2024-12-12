@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -28,7 +27,7 @@ public class PlayerModel {
         PlayerModel playerModel = new PlayerModel();
         playerModel.setName(player.getName());
         playerModel.setDisplayName(PlayerUtils.getPlayerDisplayName(player));
-        playerModel.setSkin(PlayerUtils.getSkin(player.getUniqueId()));
+        playerModel.setSkin(PlayerUtils.getSkinByPlayerName(player.getName()));
         playerModel.setGroup(PlayerUtils.getPlayerGroup(player.getUniqueId()));
         playerModel.setListOrder(0);
         playerModel.setUuid(player.getUniqueId());
@@ -43,7 +42,7 @@ public class PlayerModel {
         // TODO: Move placeholderapi usage to PlayerUtils
         player.setDisplayName(ChatUtils.withColor(PlaceholderAPI.setPlaceholders(bukkitPlayer, TabAPIUtils.getOriginalName(tabPlayer))));
         player.setListOrder(0);
-        player.setSkin(PlayerUtils.getSkin(bukkitPlayer.getUniqueId()));
+        player.setSkin(PlayerUtils.getSkinByPlayerName(bukkitPlayer.getName()));
         return player;
     }
 
