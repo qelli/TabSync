@@ -45,12 +45,7 @@ public class PlayerUtils {
     }
 
     public static String getSkinByPlayerName(String playerName) {
-        try {
-            return SkullTexture.craftHead().textureFrom(playerName);
-        } catch(Exception e) {
-            e.printStackTrace();
-            return "";
-        }
+        return SkullTexture.craftHead().textureFrom(playerName);
     }
 
 }
