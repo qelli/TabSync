@@ -1,5 +1,7 @@
 package dev.qelli.minecraft.xserversync;
 
+import com.saicone.mcode.platform.MC;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import dev.qelli.minecraft.xserversync.api.XServerSyncAPI;
@@ -12,6 +14,10 @@ import dev.qelli.minecraft.xserversync.managers.TabListManager;
 import dev.qelli.minecraft.xserversync.placeholders.PlaceholderAPIExpansion;
 
 public final class XServerSync extends JavaPlugin {
+
+    static {
+        MC.VERSION = MC.fromString(Bukkit.getServer().getBukkitVersion());
+    }
 
     static XServerSync instance;
 
