@@ -122,10 +122,15 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.github.saicone</groupId>
-            <artifactId>mcode</artifactId>
+            <groupId>com.saicone.mcode</groupId>
+            <artifactId>common</artifactId>
             <version>f799970c7a</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.saicone.mcode</groupId>
+            <artifactId>platform-bukkit</artifactId>
+            <version>f799970c7a</version>
         </dependency>
     </dependencies>
 </project>
